@@ -1,18 +1,3 @@
-const displayControl = (() => {
-    const gameboard = document.querySelector(".gameboard");
-    const cell = document.querySelectorAll("[data-index]");
-
-    cell.forEach(element => {
-        element.addEventListener("click", () => {
-            
-        });
-    });
-
-    return {
-        
-    }
-})();
-
 const board = (() => {
     let boardArray = ["","","","","","","","",""];
 
@@ -31,4 +16,36 @@ const board = (() => {
     }
 
     return {setCell, getCell, reset}
+})();
+
+const displayControl = (() => {
+    const gameboard = document.querySelector(".gameboard");
+    const cell = document.querySelectorAll("[data-index]");
+
+    cell.forEach(element => {
+        let chosenCell = element.dataset.index;
+        element.addEventListener("click", () => {
+            if(gameFlow.checkIsValid(chosenCell)) {
+                board.setCell(chosenCell, "o");
+                element.textContent = "o";
+            }
+        });
+    });
+
+    return {
+        
+    }
+})();
+
+const gameFlow = (() => {
+    function checkIsValid(index) {
+        if(board.getCell(index) === "") {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    return {checkIsValid}
+
 })();
