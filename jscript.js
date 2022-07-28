@@ -26,8 +26,7 @@ const displayControl = (() => {
         let chosenCell = element.dataset.index;
         element.addEventListener("click", () => {
             if(gameFlow.checkIsValid(chosenCell)) {
-                board.setCell(chosenCell, "o");
-                element.textContent = "o";
+                element.textContent = gameFlow.getTurn();
             }
         });
     });
@@ -38,14 +37,31 @@ const displayControl = (() => {
 })();
 
 const gameFlow = (() => {
+    let playerTurn = true;
+
     function checkIsValid(index) {
         if(board.getCell(index) === "") {
+            board.setCell(index, playerTurn);
             return true
         } else {
             return false
         }
     }
 
-    return {checkIsValid}
+    function swapTurn() {
+        playerTurn = !playerTurn;
+    }
+
+    function getTurn() {
+        if (playerTurn) {
+            swapTurn();
+            return "x"
+        } else {
+            swapTurn();
+            return "o"
+        }
+    }
+
+    return {checkIsValid, getTurn}
 
 })();
