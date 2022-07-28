@@ -25,7 +25,6 @@ nav {
 }
 
 main {
-    background-color: red;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,6 +41,10 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.gameboard.active {
+    background-color: pink;
 }
 
 footer {
