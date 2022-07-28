@@ -9,18 +9,19 @@ const board = (() => {
         return boardArray[index]
     }
 
-    function reset() {
-        for (let index of boardArray) {
-            boardArray[index] = "";
+    const reset = () => {
+        for (let i = 0; i < boardArray.length; i++) {
+          boardArray[i] = "";
         }
-    }
+      };
 
-    return {setCell, getCell, reset}
+    return {setCell, getCell, reset, boardArray}
 })();
 
 const displayControl = (() => {
     const gameboard = document.querySelector(".gameboard");
     const cell = document.querySelectorAll("[data-index]");
+    const restartBtn = document.querySelector("#restartBtn");
 
     cell.forEach(element => {
         let chosenCell = element.dataset.index;
@@ -31,13 +32,21 @@ const displayControl = (() => {
         });
     });
 
-    return {
-        
+    restartBtn.addEventListener("click", () => {
+        reset();
+        board.reset();
+    });
+
+    function reset() {
+        cell.forEach(element => {
+            element.textContent = "";
+        });
     }
+
 })();
 
 const gameFlow = (() => {
-    let playerTurn = true;
+    let playerTurn = "x";
 
     function checkIsValid(index) {
         if(board.getCell(index) === "") {
@@ -49,11 +58,15 @@ const gameFlow = (() => {
     }
 
     function swapTurn() {
-        playerTurn = !playerTurn;
+        if (playerTurn === "x") {
+            playerTurn = "o";
+        } else {
+            playerTurn = "x";
+        }
     }
 
     function getTurn() {
-        if (playerTurn) {
+        if (playerTurn === "x") {
             swapTurn();
             return "x"
         } else {
