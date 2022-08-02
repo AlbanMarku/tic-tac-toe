@@ -15,7 +15,7 @@ const board = (() => {
         }
       };
 
-    return {setCell, getCell, reset, boardArray}
+    return {setCell, getCell, reset}
 })();
 
 const displayControl = (() => {
@@ -28,6 +28,8 @@ const displayControl = (() => {
         element.addEventListener("click", () => {
             if(gameFlow.checkIsValid(chosenCell)) {
                 element.textContent = gameFlow.getTurn();
+                gameFlow.checkWinner(chosenCell);
+                gameFlow.swapTurn();
             }
         });
     });
@@ -48,6 +50,18 @@ const displayControl = (() => {
 const gameFlow = (() => {
     let playerTurn = "x";
 
+    const winningCombo = {
+        0: [[1,2],[3,6],[4,8]],
+        1: [[0,2],[4,7]],
+        2: [[0,1],[5,8],[4,6]],
+        3: [[0,6],[4,5]],
+        4: [[2,6],[3,5],[1,7],[0,8]],
+        5: [[3,4],[2,8]],
+        6: [[7,8],[0,3],[2,4]],
+        7: [[6,8],[1,4]],
+        8: [[6,7],[2,5],[0,4]]
+    }
+
     function checkIsValid(index) {
         if(board.getCell(index) === "") {
             board.setCell(index, playerTurn);
@@ -66,15 +80,23 @@ const gameFlow = (() => {
     }
 
     function getTurn() {
-        if (playerTurn === "x") {
-            swapTurn();
-            return "x"
-        } else {
-            swapTurn();
-            return "o"
+        return playerTurn
+    }
+
+    function checkWinner(cell) {
+        const selectedRange = winningCombo[cell];
+
+        for (let i = 0; i < selectedRange.length; i++) {
+            const currentCell = board.getCell(cell);
+            const firstOption = board.getCell(selectedRange[i][0]);
+            const secondOption = board.getCell(selectedRange[i][1]);
+
+            if(currentCell === firstOption && firstOption === secondOption) {
+                console.log("winner");
+            }           
         }
     }
 
-    return {checkIsValid, getTurn}
+    return {checkIsValid, getTurn, swapTurn, checkWinner}
 
 })();
