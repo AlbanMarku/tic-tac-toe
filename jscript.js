@@ -1,6 +1,3 @@
-//TODO: Check if draw.
-//Check display ending.
-
 const board = (() => {
     let boardArray = ["","","","","","","","",""];
 
@@ -16,13 +13,16 @@ const board = (() => {
         for (let i = 0; i < boardArray.length; i++) {
           boardArray[i] = "";
         }
-      };
+    };
 
-    return {setCell, getCell, reset}
+    function fullCheck() {
+        return boardArray.includes("");
+    }
+
+    return {setCell, getCell, reset, fullCheck}
 })();
 
 const displayControl = (() => {
-    const gameboard = document.querySelector(".gameboard");
     const cell = document.querySelectorAll("[data-index]");
     const restartBtn = document.querySelector("#restartBtn");
     const playerDisplay = document.querySelector(".playerArea");
@@ -49,6 +49,10 @@ const displayControl = (() => {
                 if (gameFlow.checkWinner(chosenCell)) {
                     displayWinner();
                 } else {
+                    if (!board.fullCheck()) {
+                        winnerText.textContent = "draw";
+                        winnerArea.appendChild(winnerText); //messy. can clean up to winner func.
+                    }
                     gameFlow.swapTurn();
                     showTurn();
                 }
@@ -108,6 +112,7 @@ const gameFlow = (() => {
     }
 
     function checkWinner(cell) {
+
         const selectedRange = winningCombo[cell];
 
         for (let i = 0; i < selectedRange.length; i++) {
@@ -116,13 +121,16 @@ const gameFlow = (() => {
             const secondOption = board.getCell(selectedRange[i][1]);
 
             if(currentCell === firstOption && firstOption === secondOption) {
-                console.log("win");
                 return true
             }           
         }
-        return false
     }
 
-    return {checkIsValid, getTurn, swapTurn, checkWinner}
+    function checkDraw(array) {
+        console.log(array.includes(""));
+        return array.includes("");
+    }
+
+    return {checkIsValid, getTurn, swapTurn, checkWinner, checkDraw}
 
 })();
