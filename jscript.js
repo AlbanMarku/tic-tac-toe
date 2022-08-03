@@ -1,3 +1,6 @@
+//TODO: Check if draw.
+//Check display ending.
+
 const board = (() => {
     let boardArray = ["","","","","","","","",""];
 
@@ -22,14 +25,34 @@ const displayControl = (() => {
     const gameboard = document.querySelector(".gameboard");
     const cell = document.querySelectorAll("[data-index]");
     const restartBtn = document.querySelector("#restartBtn");
+    const playerDisplay = document.querySelector(".playerArea");
+    const turnInfo = document.querySelector("#turnText");
+    const winnerArea = document.querySelector(".winnerArea");
+    const winnerText = document.querySelector("#winnerText");
+
+    function showTurn() {
+        turnInfo.textContent = "";
+        turnInfo.textContent = `${gameFlow.getTurn()} turn`;
+        playerDisplay.appendChild(turnInfo);
+    }
+
+    function displayWinner() {
+        winnerText.textContent = `${gameFlow.getTurn()} wins!`;
+        winnerArea.appendChild(winnerText);
+    }
 
     cell.forEach(element => {
         let chosenCell = element.dataset.index;
         element.addEventListener("click", () => {
             if(gameFlow.checkIsValid(chosenCell)) {
                 element.textContent = gameFlow.getTurn();
-                gameFlow.checkWinner(chosenCell);
-                gameFlow.swapTurn();
+                if (gameFlow.checkWinner(chosenCell)) {
+                    displayWinner();
+                } else {
+                    gameFlow.swapTurn();
+                    showTurn();
+                }
+
             }
         });
     });
@@ -43,6 +66,7 @@ const displayControl = (() => {
         cell.forEach(element => {
             element.textContent = "";
         });
+        winnerText.textContent = "";
     }
 
 })();
@@ -92,9 +116,11 @@ const gameFlow = (() => {
             const secondOption = board.getCell(selectedRange[i][1]);
 
             if(currentCell === firstOption && firstOption === secondOption) {
-                console.log("winner");
+                console.log("win");
+                return true
             }           
         }
+        return false
     }
 
     return {checkIsValid, getTurn, swapTurn, checkWinner}

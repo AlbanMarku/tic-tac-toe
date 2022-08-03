@@ -13,10 +13,13 @@
 </head>
 <body>
     <div class="wrapper">
-        <nav>
-            content
-        </nav>
+        <header>
+            <h1>TicTacToe</h1>
+        </header>
         <main>
+            <div class="playerArea">
+                <h2 id="turnText">x turn</h2>
+            </div>
             <div class="gameboard">
                 <div class="cell" data-index="0"></div>
                 <div class="cell" data-index="1"></div>
@@ -27,6 +30,9 @@
                 <div class="cell" data-index="6"></div>
                 <div class="cell" data-index="7"></div>
                 <div class="cell" data-index="8"></div>
+            </div>
+            <div class="winnerArea">
+                <h2 id="winnerText"></h2>
             </div>
             <div class="restartArea">
                 <button id="restartBtn">Restart</button>
